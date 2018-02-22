@@ -2,7 +2,7 @@
 
 cd "$(dirname $0)"
 
-set -e
+# set -e
 set -x
 
 source ./build/variables
