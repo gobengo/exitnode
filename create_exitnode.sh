@@ -117,5 +117,3 @@ systemctl enable babeld
 service sudomesh-gateway start
 service tunneldigger start
 service babeld start
-
-# reboot now
