@@ -4,11 +4,16 @@ set -e
 
 release_info="$(cat /etc/*-release)"
 echo "release_info=$release_info"
-release_name="$(echo $release_info | cut -d'=' -f2)"
+release_name="$(echo "$release_info" | grep ^NAME= | cut -d'=' -f2)"
+echo "release_name=$release_name"
+
 
 # Upgrade kernel on OS that require it
-if [ $release_name != '"Debian GNU/Linux 8 (jessie)"']; then
-  # it doesn't work on Debian, only Ubuntu. Might be better to whitelist Ubuntu. We'll see when testing on third OS
+echo "release_name=$release_name"
+if [ "$release_name" == '"Ubuntu"' ]; then
+  echo "OS is Ubuntu. Need to upgrade kernel"
+  # This would NOT work on Debian 8.10, (@TODO test others).
+  # It does work on Ubuntu 16.04
   apt-get install -yq \
     linux-image-extra-$(uname -r) 
 fi
