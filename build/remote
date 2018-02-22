@@ -3,6 +3,18 @@
 # This script should provision a remote linux server as an exit node
 # usage: PUBLIC_IP=165.227.241.194 ./build/remote root@165.227.241.194
 
+usage () {
+cat <<HELP_USAGE
+$0 [ssh_host]@[ssh_host]
+
+Provision an exitnode by SSHing into a remote server.
+
+[ssh_user] - usually 'root'
+[ssh_host] - Public IP address that your exitnode will be available at
+
+HELP_USAGE
+}
+
 # set -x 
 # set -e
 

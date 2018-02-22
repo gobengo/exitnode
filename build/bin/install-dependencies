@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+usage () {
+cat <<HELP_USAGE
+$0 
+
+Install dependency packages required to run an exitnode.
+HELP_USAGE
+}
+
 set -e
 
 release_info="$(cat /etc/*-release)"

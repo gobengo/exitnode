@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+usage () {
+cat <<HELP_USAGE
+$0 [-t tag]
+
+build a docker image for exitnode
+
+[-t]    tag the docker image
+HELP_USAGE
+}
+
 cd "$(dirname "$0")"
 EXITNODE_DIR=../../
 

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 
+usage () {
+cat <<HELP_USAGE
+$0
+
+Run tunneldigger in the foreground (alternative to /etc/init.d/tunneldigger)
+HELP_USAGE
+}
+
 cd /opt/tunneldigger || return
 exec /opt/tunneldigger/broker/env_tunneldigger/bin/python -m broker.main /opt/tunneldigger/broker/l2tp_broker.cfg

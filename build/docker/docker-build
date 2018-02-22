@@ -5,6 +5,14 @@ cd "$(dirname "$0")"
 # set -x
 set -e
 
+usage () {
+cat <<HELP_USAGE
+$0
+
+Meant to be run by the Dockerfile upon \`docker build\`
+HELP_USAGE
+}
+
 echo "docker-build PUBLIC_IP=$PUBLIC_IP"
 
 ../../create_exitnode.sh "$PUBLIC_IP"

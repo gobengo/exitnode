@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+usage () {
+cat <<HELP_USAGE
+$0 [public_ip]
+
+set the public ip address of this exitnode.
+Configures babeld, tunneldigger, etc and restarts them.
+
+[public_ip] - public_ip to lint for common bash mistakes. If omitted, all files will be checked
+HELP_USAGE
+}
+
 cd "$(dirname "$0")" || return
 
 . ../variables

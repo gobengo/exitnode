@@ -3,6 +3,16 @@
 # set -x
 set -e
 
+usage () {
+cat <<HELP_USAGE
+$0 [file]
+
+check bash scripts here for common mistakes
+
+[file] - file to lint for common bash mistakes. If omitted, all files will be checked
+HELP_USAGE
+}
+
 file="$1"
 
 if [ -z "$file" ]; then
