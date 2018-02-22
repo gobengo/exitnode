@@ -30,6 +30,16 @@ exit_node_ip=165.227.241.194
 
 This should SSH to the exit node, configure it, reboot, and wait for the reboot to complete.
 
+Expected Output will be like
+
+```
+⚡ ./build/remote root@165.227.241.194
+testing ssh to root@165.227.241.194
+... # lots more stuff
+.
+remote exitnode provisioned, rebooted
+```
+
 ## Docker
 
 If you don't have a Linux host around, but have access to docker (e.g. a Mac), you can run an exitnode as a docker container.
