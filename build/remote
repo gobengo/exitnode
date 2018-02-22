@@ -29,7 +29,7 @@ echo "rebooting $exitnode_ssh"
 ssh $exitnode_ssh 'nohup sudo reboot &>/dev/null & exit'
 # wait for ssh after reboot
 echo "Waiting for ssh $exitnode_ssh"
-while ! ssh $exitnode_ssh exit
+while ! ssh $exitnode_ssh exit > /dev/null
 do
     echo "."
     sleep 2

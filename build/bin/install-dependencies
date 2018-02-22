@@ -2,8 +2,16 @@
 
 set -e
 
-apt-get install -yq \
-  linux-image-extra-$(uname -r) 
+release_info="$(cat /etc/*-release)"
+echo "release_info=$release_info"
+release_name="$(echo $release_info | cut -d'=' -f2)"
+
+# Upgrade kernel on OS that require it
+if [ $release_name != '"Debian GNU/Linux 8 (jessie)"']; then
+  # it doesn't work on Debian, only Ubuntu. Might be better to whitelist Ubuntu. We'll see when testing on third OS
+  apt-get install -yq \
+    linux-image-extra-$(uname -r) 
+fi
 
 apt-get install -yq \
   build-essential \
