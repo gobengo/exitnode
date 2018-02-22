@@ -12,38 +12,11 @@ __work in progress__
 
 (is being tested on digitalocean ubuntu 16.04)
 
-## Remote Linux ##
+## Remote Linux via SSH ##
 
 Create a server (e.g., digitalocean on some other place) with one of the following tested OS on it:
 * Ubuntu 16.04
 * Debian 8.10
-
-Clone this repository on your local machine.
-
-Now run: 
-
-```
-ssh root@[ip exit node] 'bash -s' < create_exitnode.sh [ip exit node]
-```
-
-Expected output should be something like:
-
-```
-Get:1 http://security.ubuntu.com/ubuntu xenial-security InRelease [102 kB]
-Hit:2 http://ams2.mirrors.digitalocean.com/ubuntu xenial InRelease
-Get:3 http://security.ubuntu.com/ubuntu xenial-security/main Sources [108 kB]
-Get:5 http://security.ubuntu.com/ubuntu xenial-security/restricted Sources [2,116 B]
-[...]
-Cloning into '/opt/exitnode'...
-tunneldigger.service is not a native service, redirecting to systemd-sysv-install
-Executing /lib/systemd/systemd-sysv-install enable tunneldigger
-babeld.service is not a native service, redirecting to systemd-sysv-install
-Executing /lib/systemd/systemd-sysv-install enable babeld
-```
-
-## Debian
-
-Create a server (e.g. DigitalOcean) with Debian 8.10.
 
 Clone this repository on your local machine.
 
@@ -57,6 +30,8 @@ exit_node_ip=165.227.241.194
 This should SSH to the exit node, configure it, reboot, and wait for the reboot to complete.
 
 ## Docker
+
+If you don't have a Linux host around, but have access to docker (e.g. a Mac), you can run an exitnode as a docker container.
 
 ```
 exit_node_ip=165.227.241.194
