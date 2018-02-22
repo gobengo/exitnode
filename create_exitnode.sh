@@ -45,20 +45,29 @@ pip install netfilter
 pip install virtualenv
 
 TUNNELDIGGER_HOME=/opt/tunneldigger
-git clone https://github.com/jhpoelen/tunneldigger.git $TUNNELDIGGER_HOME
+git clone https://github.com/sudomesh/tunneldigger.git $TUNNELDIGGER_HOME
 virtualenv $TUNNELDIGGER_HOME/broker/env_tunneldigger
 $TUNNELDIGGER_HOME/broker/env_tunneldigger/bin/pip install -r $TUNNELDIGGER_HOME/broker/requirements.txt
 
-cat > $TUNNELDIGGER_HOME/broker/scripts/up_hook.sh <<EOF
+TUNNELDIGGER_UPHOOK_SCRIPT=$TUNNELDIGGER_HOME/broker/scripts/up_hook.sh
+TUNNELDIGGER_DOWNHOOK_SCRIPT=$TUNNELDIGGER_HOME/broker/scripts/down_hook.sh
+
+cat >$TUNNELDIGGER_UPHOOK_SCRIPT <<EOF
 #!/bin/sh
-echo "$(date) [td-hook] $*" >> /var/log/tunneldigger.log
 ip link set \$3 up
 ip addr add $MESH_IP/$MESH_PREFIX dev \$3
 ip link set dev \$3 mtu \$4
 babeld -a \$3
 EOF
 
-chmod 755 /opt/tunneldigger/broker/scripts/up_hook.sh
+chmod 755 $TUNNELDIGGER_UPHOOK_SCRIPT 
+
+cat >$TUNNELDIGGER_DOWNHOOK_SCRIPT <<EOF
+#!/bin/sh
+babeld -x \$3
+EOF
+
+chmod 755 $TUNNELDIGGER_DOWNHOOK_SCRIPT 
 
 cat >/etc/babeld.conf <<EOF
 redistribute local ip $MESH_IP/$MESH_PREFIX allow
@@ -95,6 +104,10 @@ sed -i.bak "s#address=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+#address=$PUBLIC_IP#" $C
 sed -i.bak "s#interface=lo#interface=$ETH_IF#" $CFG 
 
 $EXITNODE_DIR/build/bin/set-public-ip $PUBLIC_IP
+
+# for Digital Ocean only
+sed -i 's/dns-nameservers.*/dns-nameservers 8.8.8.8/g' /etc/network/interfaces.d/50-cloud-init.cfg
+sed -i '/address/a \   \ dns-nameservers 8.8.8.8' /etc/network/interfaces.d/50-cloud-init.cfg 
 
 # start babeld and tunnel digger on reboot
 systemctl enable sudomesh-gateway
