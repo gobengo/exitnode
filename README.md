@@ -12,9 +12,11 @@ __work in progress__
 
 (is being tested on digitalocean ubuntu 16.04)
 
-## Ubuntu ##
+## Remote Linux ##
 
-Create a server (e.g., digitalocean on some other place) with Ubuntu 16.04 on it. 
+Create a server (e.g., digitalocean on some other place) with one of the following tested OS on it:
+* Ubuntu 16.04
+* Debian 8.10
 
 Clone this repository on your local machine.
 

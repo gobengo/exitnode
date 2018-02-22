@@ -2,24 +2,26 @@
 
 cd "$(dirname $0)"
 
+set -e
+set -x
+
 source ./build/variables
 
 cat <<EOF
 
 create_exitnode.sh
 EXITNODE_DIR=$EXITNODE_DIR
-IP=$IP
 PUBLIC_IP=$PUBLIC_IP
 
 EOF
 
-./build/bin/install-dependencies > /dev/null 2>&1
+./build/bin/install-dependencies
 
 KERNEL_VERSION=$(uname -r)
 echo kernel version [$KERNEL_VERSION]
 
-mkdir ~/babel_build
-git clone https://github.com/sudomesh/babeld.git ~/babel_build/
+rm -rf ~/babel_build
+git clone https://github.com/sudomesh/babeld.git ~/babel_build
 cd ~/babel_build
 
 make && make install

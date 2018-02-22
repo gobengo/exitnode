@@ -4,7 +4,7 @@
 # usage: PUBLIC_IP=165.227.241.194 ./build/remote root@165.227.241.194
 
 # set -x 
-set -e
+# set -e
 
 cd "$(dirname $0)"
 
@@ -21,16 +21,17 @@ ssh $exitnode_ssh apt-get install -yq rsync > /dev/null 2>&1
 rsync -a ../ "$exitnode_ssh:$EXITNODE_DIR"
 
 # configure
-ssh $exitnode_ssh "PUBLIC_IP=$PUBLIC_IP EXITNODE_DIR=$EXITNODE_DIR $EXITNODE_DIR/create_exitnode.sh"
+ssh $exitnode_ssh "apt-get clean && apt-get update && dpkg --configure -a" 
+ssh -t $exitnode_ssh "PUBLIC_IP=$PUBLIC_IP EXITNODE_DIR=$EXITNODE_DIR $EXITNODE_DIR/create_exitnode.sh"
 
 # reboot
 echo "rebooting $exitnode_ssh"
 ssh $exitnode_ssh 'nohup sudo reboot &>/dev/null & exit'
 # wait for ssh after reboot
 echo "Waiting for ssh $exitnode_ssh"
-while ! ssh $exitnode_ssh exit >/dev/null 2>&1
+while ! ssh $exitnode_ssh exit
 do
-    printf "."
+    echo "."
     sleep 2
 done
 
