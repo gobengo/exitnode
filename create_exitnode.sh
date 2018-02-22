@@ -90,8 +90,8 @@ EOF
 
 echo "EXITNODE_DIR=$EXITNODE_DIR"
 if [[ ! $EXITNODE_DIR ]]; then
-  echo "cloning jhpoelan/exitnode to /opt/exitnode"
-  git clone https://github.com/jhpoelen/exitnode /opt/exitnode  
+  echo "cloning sudomesh/exitnode to /opt/exitnode"
+  git clone https://github.com/sudomesh/exitnode /opt/exitnode
   EXITNODE_DIR=/opt/exitnode
 fi
 cp -r $EXITNODE_DIR/src/etc/* /etc/
