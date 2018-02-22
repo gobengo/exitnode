@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# set -x
+set -e
+
+file=$1
+# echo "file=$file"
+
+cd "$(dirname "$file")"
+shellcheck -x "$(basename $file)"
