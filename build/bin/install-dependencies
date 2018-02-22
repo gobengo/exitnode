@@ -15,7 +15,7 @@ if [ "$release_name" == '"Ubuntu"' ]; then
   # This would NOT work on Debian 8.10, (@TODO test others).
   # It does work on Ubuntu 16.04
   apt-get install -yq \
-    linux-image-extra-$(uname -r) 
+    linux-image-extra-"$(uname -r)"
 fi
 
 apt-get install -yq \

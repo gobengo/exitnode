@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-cd /opt/tunneldigger
+cd /opt/tunneldigger || return
 exec /opt/tunneldigger/broker/env_tunneldigger/bin/python -m broker.main /opt/tunneldigger/broker/l2tp_broker.cfg

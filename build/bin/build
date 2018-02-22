@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 EXITNODE_DIR=../../
 
 set -x
 set -e
 
-docker build $@ $EXITNODE_DIR
+docker build "$@" "$EXITNODE_DIR"

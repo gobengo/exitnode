@@ -6,7 +6,7 @@
 # exit on error
 set -e
 
-./build/bin/set-public-ip $EXITNODE_PUBLIC_IP
+./build/bin/set-public-ip "$EXITNODE_PUBLIC_IP"
 
 service sudomesh-gateway start
 service tunneldigger start

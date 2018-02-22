@@ -3,8 +3,14 @@
 # set -x
 set -e
 
-file=$1
-# echo "file=$file"
+file="$1"
 
-cd "$(dirname "$file")"
-shellcheck -x "$(basename $file)"
+if [ -z "$file" ]; then
+  # no file specified, do all
+  # find src -type f -print0 | xargs -0 -L1 ./build/bin/lint 
+  find build -type f -print0 | xargs -0 -L1 ./build/bin/lint 
+else
+  # check that file
+  cd "$(dirname "$file")"
+  shellcheck -x "$(basename "$file")"
+fi
