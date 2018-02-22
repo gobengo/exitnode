@@ -39,6 +39,36 @@ babeld.service is not a native service, redirecting to systemd-sysv-install
 Executing /lib/systemd/systemd-sysv-install enable babeld
 ```
 
+## Debian
+
+Create a server (e.g. DigitalOcean) with Debian 8.10.
+
+Clone this repository on your local machine.
+
+Now run: 
+
+```
+exit_node_ip=165.227.241.194
+./build/remote root@$exit_node_ip
+```
+
+This should SSH to the exit node, configure it, reboot, and wait for the reboot to complete.
+
+## Docker
+
+```
+exit_node_ip=165.227.241.194
+# build with default ip at build time
+docker build -t exitnode --build-arg PUBLIC_IP=$exit_node_ip .
+# build with no ip yet (provide PUBLIC_IP at runtime)
+docker build -t exitnode .
+
+# run
+docker run --privileged -e IP=$exit_node_ip exitnode
+# run bash for debugging
+docker run --privileged -it -e IP=$exit_node_ip exitnode bash
+```
+
 # Testing
 
 ## Testing Tunnel Digger

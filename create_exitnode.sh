@@ -1,53 +1,22 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-IP=$1
-GATEWAY_IP=$2
+cd "$(dirname $0)"
 
-MESH_IP=100.64.0.42
-MESH_PREFIX=32
-MESHNET=100.64.0.0/10
-ETH_IF=eth0
-PUBLIC_IP=$IP
-PUBLIC_SUBNET="$IP/29"
+source ./build/variables
 
+cat <<EOF
 
-apt-get update && apt-get install -y --force-yes \
-  build-essential \
-  ca-certificates \
-  curl \
-  git \
-  libssl-dev \
-  libxslt1-dev \
-  module-init-tools \
-  bridge-utils \
-  openssh-server \
-  openssl \
-  perl \
-  dnsmasq \
-  procps \
-  python-psycopg2 \
-  python-software-properties \
-  software-properties-common \
-  python \
-  python-dev \
-  python-pip \
-  iproute \
-  libnetfilter-conntrack3 \
-  libevent-dev \
-  ebtables \
-  vim \
-  tmux
+create_exitnode.sh
+EXITNODE_DIR=$EXITNODE_DIR
+IP=$IP
+PUBLIC_IP=$PUBLIC_IP
+
+EOF
+
+./build/bin/install-dependencies > /dev/null 2>&1
 
 KERNEL_VERSION=$(uname -r)
 echo kernel version [$KERNEL_VERSION]
-
-apt-get install -y --force-yes \
-  cmake \
-  libnl-3-dev \
-  libnl-genl-3-dev \
-  build-essential \
-  pkg-config \
-  linux-image-extra-$(uname -r)
 
 mkdir ~/babel_build
 git clone https://github.com/sudomesh/babeld.git ~/babel_build/
@@ -108,15 +77,22 @@ MESHNET="$MESHNET"
 DEFAULT_ROUTE="$(ip route | head -n1 | sed 's/onlink/proto static/g')"
 EOF
 
-git clone https://github.com/jhpoelen/exitnode /opt/exitnode
-cp -r /opt/exitnode/src/etc/* /etc/
-cp /opt/exitnode/l2tp_broker.cfg $TUNNELDIGGER_HOME/broker/l2tp_broker.cfg
+echo "EXITNODE_DIR=$EXITNODE_DIR"
+if [[ ! $EXITNODE_DIR ]]; then
+  echo "cloning jhpoelan/exitnode to /opt/exitnode"
+  git clone https://github.com/jhpoelen/exitnode /opt/exitnode  
+  EXITNODE_DIR=/opt/exitnode
+fi
+cp -r $EXITNODE_DIR/src/etc/* /etc/
+cp $EXITNODE_DIR/l2tp_broker.cfg $TUNNELDIGGER_HOME/broker/l2tp_broker.cfg
 
 # Setup public ip in tunneldigger.cfg
 CFG="$TUNNELDIGGER_HOME/broker/l2tp_broker.cfg"
 
 sed -i.bak "s#address=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+#address=$PUBLIC_IP#" $CFG
 sed -i.bak "s#interface=lo#interface=$ETH_IF#" $CFG 
+
+$EXITNODE_DIR/build/bin/set-public-ip $PUBLIC_IP
 
 # start babeld and tunnel digger on reboot
 systemctl enable sudomesh-gateway
@@ -127,4 +103,4 @@ service sudomesh-gateway start
 service tunneldigger start
 service babeld start
 
-reboot now
+# reboot now

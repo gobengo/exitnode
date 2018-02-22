@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+apt-get install -y --force-yes \
+  build-essential \
+  ca-certificates \
+  curl \
+  git \
+  libssl-dev \
+  libxslt1-dev \
+  module-init-tools \
+  bridge-utils \
+  openssh-server \
+  openssl \
+  perl \
+  dnsmasq \
+  procps \
+  python-psycopg2 \
+  python-software-properties \
+  software-properties-common \
+  python \
+  python-dev \
+  python-pip \
+  iproute \
+  libnetfilter-conntrack3 \
+  libevent-dev \
+  ebtables \
+  vim \
+  tmux
+
+apt-get install -y --force-yes \
+  cmake \
+  libnl-3-dev \
+  libnl-genl-3-dev \
+  build-essential \
+  pkg-config \
+#  linux-image-extra-$(uname -r)

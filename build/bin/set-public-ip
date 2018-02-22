@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cd "$(dirname $0)"
+
+. ../variables
+
+# /opt/tunneldigger/... broker conf
+CFG="$TUNNELDIGGER_HOME/broker/l2tp_broker.cfg"
+sed -i.bak "s/address=\(.*\)/address=$PUBLIC_IP/" $CFG
+sed -i.bak "s/interface=\(.*\)/interface=$ETH_IF/" $CFG
+
+# /etc/babeld.conf
+sed 's/\(redistribute local ip \(.*\) proto 0 deny\)/redistribute local ip '$PUBLIC_IP' proto 0 deny/' -i /etc/babeld.conf
