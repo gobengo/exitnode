@@ -12,5 +12,5 @@ if [ -z "$file" ]; then
 else
   # check that file
   cd "$(dirname "$file")"
-  shellcheck -x "$(basename "$file")"
+  shellcheck -e SC2029 -x "$(basename "$file")"
 fi

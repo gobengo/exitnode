@@ -14,7 +14,7 @@ source ./variables
 exitnode_ssh=$1
 PUBLIC_IP="${PUBLIC_IP:-$(echo "$exitnode_ssh" | cut -d'@' -f2)}"
 
-ssh "$exitnode_ssh" echo testing ssh to "\$exitnode_ssh"
+ssh "$exitnode_ssh" echo testing ssh to "$exitnode_ssh"
 
 # rsync these files so we can configure
 ssh "$exitnode_ssh" apt-get install -yq rsync > /dev/null 2>&1

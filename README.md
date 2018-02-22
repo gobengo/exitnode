@@ -15,8 +15,9 @@ __work in progress__
 ## Remote Linux via SSH ##
 
 Create a server (e.g., digitalocean on some other place) with one of the following tested OS on it:
-* Ubuntu 16.04
-* Debian 8.10
+* Ubuntu 17.10 x64
+* Ubuntu 16.04 x64
+* Debian 8.10 x64
 
 Clone this repository on your local machine.
 
