@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# This script should provision a remote linux server as an exit node
-# usage: PUBLIC_IP=165.227.241.194 ./build/remote root@165.227.241.194
-
 usage () {
 cat <<HELP_USAGE
 $0 [ssh_host]@[ssh_host]
