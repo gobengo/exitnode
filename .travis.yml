@@ -9,4 +9,4 @@ before_install:
 - docker build -t exitnode .
 
 script:
-- docker run --privileged -it -e PUBLIC_IP=0.0.0.0 exitnode timeout 60 ./build/docker/docker-cmd
+- docker run --privileged -it -e PUBLIC_IP=0.0.0.0 exitnode timeout −−preserve−status 60 ./build/docker/docker-cmd
