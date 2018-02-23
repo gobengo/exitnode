@@ -2,7 +2,7 @@
 
 cd "$(dirname $0)"
 
-set -e # stop on first error
+# set -e # stop on first error
 # set -x # print every line before executing (to debug)
 
 source ./build/variables

@@ -20,4 +20,5 @@ service sudomesh-gateway start
 service tunneldigger start
 service babeld start
 
+echo "args=$@"
 exec "$@"
