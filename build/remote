@@ -23,7 +23,17 @@ source ./variables
 exitnode_ssh=$1
 PUBLIC_IP="${PUBLIC_IP:-$(echo "$exitnode_ssh" | cut -d'@' -f2)}"
 
-ssh "$exitnode_ssh" echo testing ssh to "$exitnode_ssh"
+wait_for_ssh() {
+  ssh_to_test="$1"
+  echo "Waiting for ssh $exitnode_ssh"
+  while ! ssh "$ssh_to_test" exit > /dev/null 2>&1
+  do
+      echo "."
+      sleep 2
+  done
+}
+
+wait_for_ssh "$exitnode_ssh"
 
 # rsync these files so we can configure
 ssh "$exitnode_ssh" apt-get install -yq rsync > /dev/null 2>&1
@@ -38,11 +48,6 @@ ssh -t "$exitnode_ssh" "PUBLIC_IP=$PUBLIC_IP EXITNODE_DIR=$EXITNODE_DIR $EXITNOD
 echo "rebooting $exitnode_ssh"
 ssh "$exitnode_ssh" 'nohup sudo reboot &>/dev/null & exit'
 # wait for ssh after reboot
-echo "Waiting for ssh $exitnode_ssh"
-while ! ssh "$exitnode_ssh" exit > /dev/null 2>&1
-do
-    echo "."
-    sleep 2
-done
+wait_for_ssh "$exitnode_ssh"
 
 ssh "$exitnode_ssh" 'echo remote exitnode provisioned, rebooted'
