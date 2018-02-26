@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+usage () {
+cat <<HELP_USAGE
+$0 [ssh_host]@[ssh_host]
+
+Provision an exitnode by SSHing into a remote server.
+
+[ssh_user] - usually 'root'
+[ssh_host] - Public IP address that your exitnode will be available at
+
+HELP_USAGE
+}
+
+# set -x 
+# set -e
+
+cd "$(dirname "$0")" || return
+
+export EXITNODE_DIR=/opt/exitnode
+source ./variables
+
+exitnode_ssh=$1
+PUBLIC_IP="${PUBLIC_IP:-$(echo "$exitnode_ssh" | cut -d'@' -f2)}"
+
+wait_for_ssh() {
+  ssh_to_test="$1"
+  echo "Waiting for ssh $exitnode_ssh"
+  while ! ssh "$ssh_to_test" exit > /dev/null 2>&1
+  do
+      echo "."
+      sleep 2
+  done
+}
+
+wait_for_ssh "$exitnode_ssh"
+
+# rsync these files so we can configure
+ssh "$exitnode_ssh" apt-get install -yq rsync > /dev/null 2>&1
+rsync -a ../ "$exitnode_ssh:$EXITNODE_DIR"
+
+# configure
+ssh "$exitnode_ssh" "apt-get clean && apt-get update && dpkg --configure -a" 
+  # shellcheck disable=SC2029
+ssh -t "$exitnode_ssh" "PUBLIC_IP=$PUBLIC_IP EXITNODE_DIR=$EXITNODE_DIR $EXITNODE_DIR/create_exitnode.sh"
+
+# reboot
+echo "rebooting $exitnode_ssh"
+ssh "$exitnode_ssh" 'nohup sudo reboot &>/dev/null & exit'
+# wait for ssh after reboot
+wait_for_ssh "$exitnode_ssh"
+
+ssh "$exitnode_ssh" 'echo remote exitnode provisioned, rebooted'

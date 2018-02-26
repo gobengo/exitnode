@@ -12,31 +12,49 @@ __work in progress__
 
 (is being tested on digitalocean ubuntu 16.04)
 
-## Ubuntu ##
+## Remote Linux via SSH ##
 
-Create a server (e.g., digitalocean on some other place) with Ubuntu 16.04 on it. 
+Create a server (e.g., digitalocean on some other place) with one of the following tested OS on it:
+* Ubuntu 17.10 x64
+* Ubuntu 16.04 x64
+* Debian 8.10 x64
 
 Clone this repository on your local machine.
 
 Now run: 
 
 ```
-ssh root@[ip exit node] 'bash -s' < create_exitnode.sh [ip exit node]
+exit_node_ip=165.227.241.194
+./build/remote root@$exit_node_ip
 ```
 
-Expected output should be something like:
+This should SSH to the exit node, configure it, reboot, and wait for the reboot to complete.
+
+Expected Output will be like
 
 ```
-Get:1 http://security.ubuntu.com/ubuntu xenial-security InRelease [102 kB]
-Hit:2 http://ams2.mirrors.digitalocean.com/ubuntu xenial InRelease
-Get:3 http://security.ubuntu.com/ubuntu xenial-security/main Sources [108 kB]
-Get:5 http://security.ubuntu.com/ubuntu xenial-security/restricted Sources [2,116 B]
-[...]
-Cloning into '/opt/exitnode'...
-tunneldigger.service is not a native service, redirecting to systemd-sysv-install
-Executing /lib/systemd/systemd-sysv-install enable tunneldigger
-babeld.service is not a native service, redirecting to systemd-sysv-install
-Executing /lib/systemd/systemd-sysv-install enable babeld
+⚡ ./build/remote root@165.227.241.194
+testing ssh to root@165.227.241.194
+... # lots more stuff
+.
+remote exitnode provisioned, rebooted
+```
+
+## Docker
+
+If you don't have a Linux host around, but have access to docker (e.g. a Mac), you can run an exitnode as a docker container.
+
+```
+exit_node_ip=165.227.241.194
+# build with default ip at build time
+docker build -t exitnode --build-arg PUBLIC_IP=$exit_node_ip .
+# build with no ip yet (provide PUBLIC_IP at runtime)
+docker build -t exitnode .
+
+# run
+docker run --privileged -e IP=$exit_node_ip exitnode
+# run bash for debugging
+docker run --privileged -it -e IP=$exit_node_ip exitnode bash
 ```
 
 # Testing

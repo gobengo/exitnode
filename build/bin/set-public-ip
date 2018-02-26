@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+usage () {
+cat <<HELP_USAGE
+$0 [public_ip]
+
+set the public ip address of this exitnode.
+Configures babeld, tunneldigger, etc and restarts them.
+
+[public_ip] - public_ip to lint for common bash mistakes. If omitted, all files will be checked
+HELP_USAGE
+}
+
+cd "$(dirname "$0")" || return
+
+. ../variables
+
+# /opt/tunneldigger/... broker conf
+CFG="$TUNNELDIGGER_HOME/broker/l2tp_broker.cfg"
+sed -i.bak "s/address=\\(.*\\)/address=$PUBLIC_IP/" $CFG
+sed -i.bak "s/interface=\\(.*\\)/interface=$ETH_IF/" $CFG
+
+# /etc/babeld.conf
+sed 's/\(redistribute local ip \(.*\) proto 0 deny\)/redistribute local ip '"$PUBLIC_IP"' proto 0 deny/' -i /etc/babeld.conf

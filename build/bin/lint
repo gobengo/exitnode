@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# set -x
+set -e
+
+usage () {
+cat <<HELP_USAGE
+$0 [file]
+
+check bash scripts here for common mistakes
+
+[file] - file to lint for common bash mistakes. If omitted, all files will be checked
+HELP_USAGE
+}
+
+file="$1"
+
+if [ -z "$file" ]; then
+  # no file specified, do all
+  # find src -type f -print0 | xargs -0 -L1 ./build/bin/lint 
+  find build -type f -print0 | xargs -0 -L1 ./build/bin/lint 
+else
+  # check that file
+  cd "$(dirname "$file")"
+  shellcheck -e SC2029 -x "$(basename "$file")"
+fi

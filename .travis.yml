@@ -1,0 +1,12 @@
+sudo: required
+
+language: javascript
+
+services:
+  - docker
+
+before_install:
+- docker build -t exitnode .
+
+script:
+- docker run --privileged -it -e IP=ip.for.travis.yml exitnode
