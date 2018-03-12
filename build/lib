@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+wait_for_ssh() {
+  ssh_to_test="$1"
+  while ! ssh "$ssh_to_test" exit > /dev/null 2>&1
+  do
+    printf "."
+    sleep 2
+  done
+}
